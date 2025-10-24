@@ -1,0 +1,233 @@
+/* src/App.css */
+
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f4f7f6;
+}
+
+.auth-form {
+  background: #ffffff;
+  padding: 2.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 400px;
+}
+
+.auth-form h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #555;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box; /* Important for padding to work right */
+}
+
+.auth-button {
+  width: 100%;
+  padding: 0.85rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #007aff;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.auth-button:hover {
+  background-color: #005bb5;
+}
+
+.error-message {
+  color: #d93025;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.auth-switch {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.auth-switch a {
+  color: #007aff;
+  text-decoration: none;
+}
+
+.chat-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  background-color: #f4f7f6;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
+  height: 60px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #ddd;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.navbar h2 {
+  color: #333;
+}
+
+.logout-button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #d93025;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.logout-button:hover {
+  background-color: #b02318;
+}
+
+.main-content {
+  display: flex;
+  flex: 1; /* Makes this fill the remaining height */
+  overflow: hidden; /* Prevents scrolling at this level */
+}
+
+.sidebar {
+  width: 300px;
+  background-color: #ffffff;
+  border-right: 1px solid #ddd;
+  padding: 1.5rem;
+}
+
+.file-upload-container h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.chat-container {
+  flex: 1; /* Makes the chat area fill the remaining width */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Prevents scrolling */
+}
+
+.message-list {
+  flex: 1; /* Fills the space */
+  overflow-y: auto; /* Allows messages to scroll */
+  padding: 1.5rem;
+}
+
+.message {
+  margin-bottom: 1rem;
+  max-width: 80%;
+  padding: 0.75rem 1.25rem;
+  border-radius: 18px;
+}
+
+.message p {
+  margin: 0;
+}
+
+.message-assistant {
+  background-color: #e9e9eb;
+  color: #333;
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+
+.chat-input-area {
+  display: flex;
+  padding: 1.5rem;
+  border-top: 1px solid #ddd;
+  background-color: #ffffff;
+}
+
+.chat-input-area input {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-right: 1rem;
+}
+
+.chat-input-area button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #007aff;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.success-message {
+  color: #008a00;
+  margin-top: 1rem;
+}
+
+.sidebar hr {
+  border: none;
+  border-top: 1px solid #eee;
+  margin: 2rem 0;
+}
+
+/* ... all your other styles ... */
+
+.message-user {
+  background-color: #007aff;
+  color: white;
+  align-self: flex-end; /* Right-align user messages */
+  border-bottom-right-radius: 4px; /* Slightly different shape */
+  margin-left: auto; /* Push to the right */
+}
+
+.loading-indicator span {
+  animation: blink 1.4s infinite both;
+}
+
+.loading-indicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.loading-indicator span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 0.2;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.2;
+  }
+}

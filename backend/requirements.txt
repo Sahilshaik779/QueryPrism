@@ -1,0 +1,29 @@
+# Core LangChain
+langchain>=0.1.0
+langchain-core
+langchain-community
+langchain-huggingface
+langchain-text-splitters
+
+langchain-google-genai
+
+pypdf
+python-docx
+
+sentence-transformers
+faiss-cpu
+
+fastapi[all]
+pydantic-settings 
+
+# Authentication
+bcrypt   
+python-jose[cryptography]
+
+# Utilities
+python-dotenv
+jupyterlab
+
+#postgresql
+sqlalchemy
+psycopg2-binary

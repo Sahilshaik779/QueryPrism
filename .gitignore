@@ -1,0 +1,21 @@
+# Python backend specific
+backend/venv/
+backend/__pycache__/
+backend/*.pyc
+backend/.env
+backend/data/vector_stores/*
+!backend/data/vector_stores/.gitkeep # Keep the folder but ignore contents
+backend/taskplanner.db # If you still have this temp db
+
+# Node frontend specific
+frontend/node_modules/
+frontend/.DS_Store
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/.env*.local
+frontend/.env
+
+# OS specific
+.DS_Store
+Thumbs.db
