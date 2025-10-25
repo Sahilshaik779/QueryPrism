@@ -1,4 +1,3 @@
-# backend/app/api/dependencies.py
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
@@ -30,7 +29,6 @@ def get_current_user(
     
     # This dependency can also return inactive users,
     # the /login endpoint is responsible for blocking them.
-    # Or we can add a check here. Let's add it.
     
     if not user.is_active:
          raise HTTPException(status_code=400, detail="Inactive user")

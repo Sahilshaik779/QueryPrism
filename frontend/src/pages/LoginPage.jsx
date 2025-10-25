@@ -1,19 +1,18 @@
-// src/pages/LoginPage.jsx
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext'; // <-- Import our hook
+import { useAuth } from '../context/AuthContext'; 
 
 function LoginPage() {
-  // --- Hooks ---
+  //  Hooks
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const { login } = useAuth(); // <-- Get the login function from context
+  const { login } = useAuth(); 
 
-  // --- Handlers ---
+  // Handlers 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -27,10 +26,7 @@ function LoginPage() {
     setError(null);
 
     try {
-      // Call the login function from our AuthContext
       await login(formData.email, formData.password);
-
-      // If login is successful, redirect to the chat page
       navigate('/');
 
     } catch (err) {
@@ -42,7 +38,7 @@ function LoginPage() {
     }
   };
 
-  // --- Render ---
+  // Render
   return (
     <div className="auth-container">
       <form className="auth-form" onSubmit={handleSubmit}>

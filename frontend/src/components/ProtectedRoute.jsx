@@ -1,7 +1,6 @@
-// src/components/ProtectedRoute.jsx
+
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-// Add the .jsx extension to this import
 import { useAuth } from '../context/AuthContext'; 
 
 function ProtectedRoute({ children }) {
@@ -12,7 +11,7 @@ function ProtectedRoute({ children }) {
     return <Navigate to="/login" replace />;
   }
 
-  // If authenticated, render the child component (the ChatPage)
+  // If authenticated, render the child component 
   return children;
 }
 

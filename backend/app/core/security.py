@@ -4,13 +4,12 @@ from jose import JWTError, jwt
 from app.core.config import settings
 from app.schemas import TokenData
 from typing import Optional
-import bcrypt # <-- Import bcrypt directly
+import bcrypt 
 
-# --- Password Hashing (Using bcrypt) ---
+#Password Hashing by bycrypt
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verifies a plain password against a hashed one."""
-    # We must encode both to bytes for bcrypt
     return bcrypt.checkpw(
         plain_password.encode('utf-8'), 
         hashed_password.encode('utf-8')
@@ -18,14 +17,14 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 def get_password_hash(password: str) -> str:
     """Hashes a plain password."""
-    # Hash the password and decode the result back to a string
+    # Hash the password and decode 
     hashed_bytes = bcrypt.hashpw(
         password.encode('utf-8'), 
         bcrypt.gensalt()
     )
     return hashed_bytes.decode('utf-8')
 
-# --- JWT Token Handling (Unchanged) ---
+# JWT Token Handling
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
     to_encode = data.copy()

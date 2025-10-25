@@ -1,8 +1,6 @@
-# backend/app/schemas.py
 from pydantic import BaseModel, EmailStr, Field, field_validator
 from typing import Optional
 
-# --- Document Schemas ---
 class QueryRequest(BaseModel):
     query: str
     document_id: str  
@@ -14,7 +12,7 @@ class UploadResponse(BaseModel):
 class QueryResponse(BaseModel):
     answer: str
 
-# --- User & Auth Schemas (Adapted from your example) ---
+# User & Auth Schemas 
 class UserBase(BaseModel):
     email: EmailStr
 
@@ -45,3 +43,10 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     email: Optional[str] = None
+
+class UserQueryRequest(BaseModel):
+    """
+    Pydantic model for the request body of the multi-document query endpoint.
+    Only requires the query string.
+    """
+    query: str

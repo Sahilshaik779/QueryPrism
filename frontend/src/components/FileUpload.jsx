@@ -1,84 +1,73 @@
-// src/components/FileUpload.jsx
-import React, { useState, useRef } from 'react'; // Import useRef
+import React, { useState, useRef } from 'react';
 import apiClient from '../api/apiClient.js';
+import toast from 'react-hot-toast'; 
 
 function FileUpload({ onUploadSuccess }) {
   const [selectedFile, setSelectedFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
 
-  // --- NEW: Ref for the file input ---
   const fileInputRef = useRef(null);
 
   const handleFileChange = (e) => {
-    setSelectedFile(e.target.files[0]);
-    setError(null);
-    setSuccess(null);
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+
+    }
   };
 
   const handleUpload = async () => {
-    // ... (start of function is unchanged)
-    if (!selectedFile) {
-      setError('Please select a file first.');
-      return;
-    }
+    if (!selectedFile) return;
+
     setIsLoading(true);
-    setError(null);
-    setSuccess(null);
+    const loadingToastId = toast.loading(`Processing "${selectedFile.name}"...`); // Show loading toast
+
     const formData = new FormData();
     formData.append('file', selectedFile);
 
     try {
-      const response = await apiClient.post('/api/rag/upload', formData, {
+      await apiClient.post('/api/rag/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
-      setIsLoading(false);
-      setSuccess(`File '${selectedFile.name}' processed!`);
+      toast.success(`"${selectedFile.name}" processed!`, { id: loadingToastId }); 
       
-      // --- NEW: Clear the input ---
-      setSelectedFile(null); // Clear the selected file state
-      if (fileInputRef.current) {
-        fileInputRef.current.value = ""; // Reset the input field
-      }
-      // --- END NEW ---
+      onUploadSuccess(selectedFile.name); 
 
-      onUploadSuccess(response.data.document_id);
+      setSelectedFile(null); 
+      if (fileInputRef.current) fileInputRef.current.value = ""; 
 
     } catch (err) {
-      // ... (error handling is unchanged)
-       setIsLoading(false);
-       setSelectedFile(null); // Also clear on error
-       if (fileInputRef.current) {
-          fileInputRef.current.value = ""; 
-       }
+       let errorMsg = 'File upload failed. Please try again.';
        if (err.response && err.response.data.detail) {
-        setError(err.response.data.detail);
-      } else {
-        setError('File upload failed. Please try again.');
-      }
+         errorMsg = err.response.data.detail;
+       }
+       toast.error(errorMsg, { id: loadingToastId }); 
+       
+       setSelectedFile(null); 
+       if (fileInputRef.current) fileInputRef.current.value = ""; 
+    } finally {
+       setIsLoading(false); 
     }
   };
 
   return (
     <div className="file-upload-container">
-      <h3>1. Upload a Document</h3>
+      <h3>Upload New Document</h3>
       <input 
         type="file" 
         onChange={handleFileChange} 
         accept=".pdf,.docx,.csv" 
-        ref={fileInputRef} // <-- Assign the ref
+        ref={fileInputRef}
       />
-      <button onClick={handleUpload} disabled={isLoading || !selectedFile}> {/* Disable if no file */}
-        {isLoading ? 'Processing...' : 'Upload'}
+      <button onClick={handleUpload} disabled={isLoading || !selectedFile}>
+        {/* Update button text slightly */}
+        {isLoading ? 'Processing...' : 'Upload & Add'} 
       </button>
       
-      {success && <p className="success-message">{success}</p>}
-      {error && <p className="error-message">{error}</p>}
-
-      <hr />
-      <h3>2. Ask a Question</h3>
+      {/* Remove local success/error messages */}
+      {/* {success && <p className="success-message">{success}</p>} */}
+      {/* {error && <p className="error-message">{error}</p>} */}
     </div>
   );
 }

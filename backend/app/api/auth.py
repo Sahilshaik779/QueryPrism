@@ -13,7 +13,7 @@ router = APIRouter()
 
 @router.post("/register", response_model=schemas.User)
 async def register(
-    form_data: schemas.UserCreate, # <-- Use the new schema
+    form_data: schemas.UserCreate, 
     db: Session = Depends(get_db)
 ):
     db_user = db.query(models.User).filter(models.User.email == form_data.email).first()
@@ -26,9 +26,9 @@ async def register(
     hashed_password = get_password_hash(form_data.password)
     new_user = models.User(
         email=form_data.email,
-        full_name=form_data.full_name, # <-- Add full_name
+        full_name=form_data.full_name, 
         hashed_password=hashed_password,
-        is_active=True # <-- Set to active
+        is_active=True 
     )
     
     db.add(new_user)

@@ -1,4 +1,3 @@
-// src/context/AuthContext.jsx
 import React, { createContext, useState, useContext, useEffect } from 'react'; // Import useEffect
 import apiClient from '../api/apiClient.js'; // Use .js if you renamed it
 
@@ -8,12 +7,10 @@ const AuthContext = createContext();
 // Get token from local storage
 const initialToken = localStorage.getItem('token');
 
-// --- THIS IS THE FIX ---
-// If a token was found, set it on apiClient *immediately*
 if (initialToken) {
   apiClient.defaults.headers.common['Authorization'] = `Bearer ${initialToken}`;
 }
-// --- END FIX ---
+
 
 // 2. Create the Provider
 export function AuthProvider({ children }) {
@@ -21,7 +18,6 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(initialToken);
 
   const login = async (email, password) => {
-    // ... (rest of your login function is unchanged)
     const formData = new URLSearchParams();
     formData.append('username', email);
     formData.append('password', password);
@@ -37,7 +33,6 @@ export function AuthProvider({ children }) {
   };
 
   const logout = () => {
-    // ... (rest of your logout function is unchanged)
     setToken(null);
     localStorage.removeItem('token');
     delete apiClient.defaults.headers.common['Authorization'];

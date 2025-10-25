@@ -1,7 +1,6 @@
-// src/components/LogoutButton.jsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext'; // Make sure to use .jsx
+import { useAuth } from '../context/AuthContext'; 
 
 function LogoutButton() {
   const { logout } = useAuth();
@@ -9,7 +8,7 @@ function LogoutButton() {
 
   const handleLogout = () => {
     logout();
-    navigate('/login'); // Redirect to login page after logout
+    navigate('/login'); 
   };
 
   return (

@@ -1,4 +1,3 @@
-// src/pages/RegisterPage.jsx
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import apiClient from '../api/apiClient';
@@ -12,15 +11,10 @@ function RegisterPage() {
     password: '',
   });
   
-  // State for storing any registration errors
   const [error, setError] = useState(null);
   
-  // Hook from react-router-dom to redirect the user
   const navigate = useNavigate();
 
-  // --- Handlers ---
-  
-  // This function updates the state object as the user types
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
