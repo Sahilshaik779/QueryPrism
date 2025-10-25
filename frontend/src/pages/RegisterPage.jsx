@@ -1,21 +1,23 @@
+// src/pages/RegisterPage.jsx
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import apiClient from '../api/apiClient.js'; 
 import toast from 'react-hot-toast'; 
 
 function RegisterPage() {
-  // --- Hooks ---
+  // State for form data (email, full name, password)
   const [formData, setFormData] = useState({
     email: '',
     fullName: '',
     password: '',
   });
-  
 
-  const [isLoading, setIsLoading] = useState(false); 
+  // State to track loading status
+  const [isLoading, setIsLoading] = useState(false);
+  // Hook for navigation
   const navigate = useNavigate();
 
-  // --- Handlers ---
+  // Handler to update form data state on input change
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -24,35 +26,37 @@ function RegisterPage() {
     }));
   };
 
+  // Handler for form submission
   const handleSubmit = async (e) => {
-    e.preventDefault(); 
-    setIsLoading(true); // Set loading true
+    e.preventDefault(); // Prevent default form submission
+    setIsLoading(true); // Start loading indicator
 
     try {
-      // Send the data to the backend
+      // Send registration data to the backend API
       await apiClient.post('/api/auth/register', {
         email: formData.email,
-        full_name: formData.fullName, 
+        full_name: formData.fullName,
         password: formData.password,
       });
 
-      toast.success('Registration successful! Please log in.'); 
+      // Show success message via toast
+      toast.success('Registration successful! Please log in.');
+      // Redirect user to the login page
       navigate('/login');
 
     } catch (err) {
       const errorMsg = err.response?.data?.detail || 'Registration failed. Please try again.';
-      toast.error(errorMsg); 
-      setIsLoading(false); // Set loading false ONLY on error
-    } 
-
+      toast.error(errorMsg);
+      setIsLoading(false); 
+    }
   };
 
-  // --- Render ---
   return (
     <div className="auth-container">
       <form className="auth-form" onSubmit={handleSubmit}>
         <h2>Create Your Account</h2>
-        
+
+        {/* Full Name Input Field */}
         <div className="form-group">
           <label htmlFor="fullName">Full Name</label>
           <input
@@ -66,6 +70,7 @@ function RegisterPage() {
           />
         </div>
 
+        {/* Email Input Field */}
         <div className="form-group">
           <label htmlFor="email">Email</label>
           <input
@@ -79,9 +84,10 @@ function RegisterPage() {
           />
         </div>
 
+        {/* Password Input Field */}
         <div className="form-group">
-          {/* Update label for clarity */}
-          <label htmlFor="password">Password (min 8 chars, max 72 bytes)</label> 
+          {/* Updated label for clarity */}
+          <label htmlFor="password">Password (minimum 8 characters)</label>
           <input
             type="password"
             id="password"
@@ -90,15 +96,20 @@ function RegisterPage() {
             onChange={handleChange}
             minLength="8" // Basic HTML5 validation
             required
-            disabled={isLoading} // Disable input while loading
+            disabled={isLoading} 
           />
         </div>
 
-        {/* Update button text and disable on load */}
-        <button type="submit" className="auth-button" disabled={isLoading}>
+        {/* Submit Button */}
+        <button
+          type="submit"
+          className="auth-button"
+          disabled={isLoading} // Disable while loading
+        >
            {isLoading ? 'Registering...' : 'Register'}
         </button>
-        
+
+        {/* Link to Login Page */}
         <p className="auth-switch">
           Already have an account? <Link to="/login">Login here</Link>
         </p>

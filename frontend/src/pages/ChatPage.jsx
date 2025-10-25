@@ -1,4 +1,3 @@
-// src/pages/ChatPage.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import LogoutButton from '../components/LogoutButton.jsx';
 import FileUpload from '../components/FileUpload.jsx';
@@ -14,7 +13,6 @@ function ChatPage() {
   const [isLoading, setIsLoading] = useState(false);
 
   // --- Refs ---
-  // messagesEndRef: Ref attached to an empty div at the bottom of the message list for auto-scrolling
   const messagesEndRef = useRef(null);
   const documentListRef = useRef(null);
 

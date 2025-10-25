@@ -1,6 +1,5 @@
 from langchain_huggingface import HuggingFaceEmbeddings
 
-# Centralized definition for the embedding model
 def get_embedding_function():
     """Gets the embedding model from Hugging Face."""
     print("Loading embedding model (if not already loaded)...")

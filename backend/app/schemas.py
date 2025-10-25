@@ -50,3 +50,25 @@ class UserQueryRequest(BaseModel):
     Only requires the query string.
     """
     query: str
+
+class ForgotPasswordRequest(BaseModel):
+    email: EmailStr
+
+class ResetPasswordRequest(BaseModel):
+    email: EmailStr 
+    new_password: str = Field(..., min_length=8)
+
+    @field_validator('new_password')
+    @classmethod
+    def validate_password_bcrypt(cls, v: str) -> str:
+        byte_length = len(v.encode('utf-8'))
+        if byte_length > 72:
+            raise ValueError(f'Password is too long ({byte_length} bytes). Max 72 bytes.')
+        return v
+
+
+class SimpleResponse(BaseModel):
+    message: str
+
+class ForgotPasswordResponse(BaseModel): # Token removed
+    message: str

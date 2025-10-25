@@ -1,12 +1,10 @@
-# backend/app/core/security.py
 from datetime import datetime, timedelta, timezone
 from jose import JWTError, jwt
 from app.core.config import settings
 from app.schemas import TokenData
 from typing import Optional
 import bcrypt 
-
-#Password Hashing by bycrypt
+import secrets
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verifies a plain password against a hashed one."""
@@ -46,3 +44,6 @@ def decode_access_token(token: str) -> Optional[TokenData]:
         return TokenData(email=email)
     except JWTError:
         return None
+    
+def create_password_reset_token() -> str:
+    return secrets.token_urlsafe(32)

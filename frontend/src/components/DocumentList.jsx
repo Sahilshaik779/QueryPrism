@@ -15,7 +15,7 @@ const DocumentList = forwardRef((props, ref) => {
       setDocuments(response.data); 
     } catch (err) {
       console.error("Error fetching documents:", err);
-      toast.error("Could not load document list."); // Use toast 
+      toast.error("Could not load document list."); 
     } finally {
       setIsLoading(false);
     }
@@ -30,7 +30,7 @@ const DocumentList = forwardRef((props, ref) => {
     }
 
     setDeletingFilename(filename); 
-    // setError(null); // Remove if not used
+    // setError(null); 
     const loadingToastId = toast.loading(`Deleting "${filename}"...`); // Show loading toast
 
     try {

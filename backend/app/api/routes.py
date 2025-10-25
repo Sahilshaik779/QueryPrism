@@ -1,9 +1,8 @@
-# backend/app/api/routes.py
 from fastapi import APIRouter, UploadFile, File, HTTPException, Depends, status, Path
 from sqlalchemy.orm import Session
 import tempfile
 import os
-import uuid # useful for temporary filenames if needed
+import uuid 
 from app.vector_db import get_chroma_collection_object
 
 from app.core import rag 
@@ -180,5 +179,5 @@ async def delete_document(
             detail=f"Failed to delete document record from database."
         )
 
-    # Return No Content on success
+    
     return None 

@@ -27,8 +27,6 @@ def get_current_user(
     if user is None:
         raise credentials_exception
     
-    # This dependency can also return inactive users,
-    # the /login endpoint is responsible for blocking them.
     
     if not user.is_active:
          raise HTTPException(status_code=400, detail="Inactive user")
