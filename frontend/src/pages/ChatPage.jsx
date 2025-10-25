@@ -1,141 +1,135 @@
+// src/pages/ChatPage.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import LogoutButton from '../components/LogoutButton.jsx';
 import FileUpload from '../components/FileUpload.jsx';
-import DocumentList from '../components/DocumentList.jsx'; 
-import apiClient from '../api/apiClient.js'; 
+import DocumentList from '../components/DocumentList.jsx';
+import apiClient from '../api/apiClient.js';
 
 function ChatPage() {
-  // State for messages, input value, and loading status
+  // --- State ---
   const [messages, setMessages] = useState([
-    { role: 'assistant', content: 'Hello! Upload a document or ask a question about your existing documents.' } 
+    { role: 'assistant', content: 'Hello! Upload a document or ask a question about your existing documents.' }
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  
-  // Refs for auto-scrolling and triggering document list refresh
+
+  // --- Refs ---
+  // messagesEndRef: Ref attached to an empty div at the bottom of the message list for auto-scrolling
   const messagesEndRef = useRef(null);
-  const documentListRef = useRef(null); 
+  const documentListRef = useRef(null);
 
-  // Auto-scroll function
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
+  // --- Effects ---
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]); 
 
-  // Function to handle sending a query to the backend
+  // --- Handlers ---
   const handleSendMessage = async () => {
-    // Prevent sending empty messages or while already loading
-    if (!inputValue.trim() || isLoading) return; 
+    if (!inputValue.trim() || isLoading) return;
 
-    // Create the user's message object
     const userMessage = { role: 'user', content: inputValue };
-    // Add user's message to the chat display immediately
     setMessages((prevMessages) => [...prevMessages, userMessage]);
-    
-    // Clear the input field and set loading state
+
     setInputValue('');
     setIsLoading(true);
 
     try {
-      // Send the query to the backend API (no document_id needed)
+      // Make the API call to the backend query endpoint
       const response = await apiClient.post('/api/rag/query', {
-        query: userMessage.content,
+        query: userMessage.content, 
       });
-      // Create the assistant's response object
       const assistantMessage = { role: 'assistant', content: response.data.answer };
-      // Add assistant's message to the chat display
       setMessages((prevMessages) => [...prevMessages, assistantMessage]);
     } catch (err) {
       console.error("Error querying document:", err);
-      // Add an error message to the chat if the API call fails
-      const errorMessage = { 
-        role: 'assistant', 
-        content: 'Sorry, I encountered an error processing your request. Please try again.' 
+      // Add a user-friendly error message to the chat on failure
+      const errorMessage = {
+        role: 'assistant',
+        content: 'Sorry, I encountered an error processing your request. Please try again.'
       };
       setMessages((prevMessages) => [...prevMessages, errorMessage]);
     } finally {
+
       setIsLoading(false);
     }
   };
-  
-  // Function called by FileUpload component upon successful upload
-  const handleUploadSuccess = (fileName) => { 
 
-    setMessages((prevMessages) => [...prevMessages, 
+  // Callback function passed to FileUpload, triggered on successful upload
+  const handleUploadSuccess = (fileName) => {
+
+    setMessages((prevMessages) => [...prevMessages,
         { role: 'assistant', content: `"${fileName}" processed and added to your knowledge base.` }
     ]);
-
+    // Call the 'refresh' method on the DocumentList component via its ref
     if (documentListRef.current) {
-      documentListRef.current.refresh(); 
+      documentListRef.current.refresh();
     }
   };
 
-  // Render the Chat Page UI
+  // --- Render ---
   return (
     <div className="chat-page">
-      {/* Top Navigation Bar */}
+      {/* Top navigation bar */}
       <nav className="navbar">
-         <h2>QueryPrism 📄</h2> {/* Added an icon */}
+         <h2>QueryPrism 📄</h2>
          <LogoutButton />
       </nav>
 
-      {/* Main Content Area (Sidebar + Chat) */}
+      {/* Main content area */}
       <div className="main-content">
-        {/* Sidebar Section */}
+        {/* Left Sidebar */}
         <aside className="sidebar">
-          {/* File Upload Component */}
-          <FileUpload onUploadSuccess={handleUploadSuccess} /> 
-          
-          <hr /> {/* Separator */}
-
-          {/* Document List Component */}
-          <DocumentList ref={documentListRef} /> 
+          {/* File upload component, passing the success handler */}
+          <FileUpload onUploadSuccess={handleUploadSuccess} />
+          <hr />
+          {/* Document list component, attaching the ref */}
+          <DocumentList ref={documentListRef} />
         </aside>
 
-        {/* Main Chat Window Section */}
+        {/* Right Chat Area */}
         <main className="chat-container">
-          {/* List of Messages */}
-           <div className="message-list">
-            {/* Map through the messages array and render each message */}
-            {messages.map((msg, index) => ( 
+           {/* Message display area, applies 'loading' class for dimming */}
+           <div className={`message-list ${isLoading ? 'loading' : ''}`}>
+            {/* Iterate over the messages array to display each chat bubble */}
+            {messages.map((msg, index) => (
               <div key={index} className={`message message-${msg.role}`}>
-                <p>{msg.content}</p>
-              </div> 
+                {/* Split message content by newlines to render paragraphs */}
+                {msg.content.split('\n').map((line, i) => (
+                  <p key={i} style={{ marginBlockStart: '0em', marginBlockEnd: '0em' }}>{line || '\u00A0'}</p>
+                ))}
+              </div>
             ))}
-            {/* Display loading indicator when waiting for response */}
-            {isLoading && ( 
+            {/* Display the "Thinking..." indicator while loading */}
+             {isLoading && (
               <div className="message message-assistant loading-indicator">
                 <span>Thinking</span><span>.</span><span>.</span><span>.</span>
-              </div> 
+              </div>
             )}
-            {/* Empty div used as a target for auto-scrolling */}
-            <div ref={messagesEndRef} /> 
+            {/* Invisible element used as the target for scrolling */}
+            <div ref={messagesEndRef} />
           </div>
 
-          {/* Chat Input Area at the Bottom */}
+          {/* Input area at the bottom */}
           <div className="chat-input-area">
-             <input 
-               type="text" 
-               placeholder="Ask anything about your documents..." 
-               disabled={isLoading} // Disable input while loading
-               value={inputValue} // Bind input value to state
-               onChange={(e) => setInputValue(e.target.value)} // Update state when typing
-               // Allow sending message by pressing Enter
-               onKeyPress={(e) => { 
-                 if (e.key === 'Enter' && !e.shiftKey) { // Check for Enter key (not Shift+Enter)
-                   e.preventDefault(); // Prevent adding a newline
-                   handleSendMessage(); // Send the message
-                 } 
-               }} 
+             <input
+               type="text"
+               placeholder="Ask anything about your documents..."
+               disabled={isLoading}
+               value={inputValue} 
+               onChange={(e) => setInputValue(e.target.value)} 
+               // Handle Enter key press for sending message
+               onKeyPress={(e) => {
+                 if (e.key === 'Enter' && !e.shiftKey) {
+                   e.preventDefault(); 
+                   handleSendMessage(); 
+                 }
+               }}
              />
-             <button 
-               onClick={handleSendMessage} // Send message on button click
-               disabled={isLoading} // Disable button while loading
-             > 
-               Send 
+             <button
+               onClick={handleSendMessage} 
+               disabled={isLoading} 
+             >
+               Send
              </button>
           </div>
         </main>

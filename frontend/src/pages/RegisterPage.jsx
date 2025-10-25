@@ -1,20 +1,21 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import apiClient from '../api/apiClient';
+import apiClient from '../api/apiClient.js'; 
+import toast from 'react-hot-toast'; 
 
 function RegisterPage() {
   // --- Hooks ---
-  // Use a single state object to hold all form data
   const [formData, setFormData] = useState({
     email: '',
     fullName: '',
     password: '',
   });
   
-  const [error, setError] = useState(null);
-  
+
+  const [isLoading, setIsLoading] = useState(false); 
   const navigate = useNavigate();
 
+  // --- Handlers ---
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -23,31 +24,27 @@ function RegisterPage() {
     }));
   };
 
-  // This function is called when the user clicks "Register"
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Stop the form from refreshing the page
-    setError(null); // Clear any old errors
+    e.preventDefault(); 
+    setIsLoading(true); // Set loading true
 
     try {
       // Send the data to the backend
-      // Note: We map JS camelCase (fullName) to Python snake_case (full_name)
       await apiClient.post('/api/auth/register', {
         email: formData.email,
-        full_name: formData.fullName,
+        full_name: formData.fullName, 
         password: formData.password,
       });
 
-      // If registration is successful, redirect to the login page
+      toast.success('Registration successful! Please log in.'); 
       navigate('/login');
 
     } catch (err) {
-      // If the API returns an error
-      if (err.response && err.response.data.detail) {
-        setError(err.response.data.detail);
-      } else {
-        setError('Registration failed. Please try again.');
-      }
-    }
+      const errorMsg = err.response?.data?.detail || 'Registration failed. Please try again.';
+      toast.error(errorMsg); 
+      setIsLoading(false); // Set loading false ONLY on error
+    } 
+
   };
 
   // --- Render ---
@@ -65,6 +62,7 @@ function RegisterPage() {
             value={formData.fullName}
             onChange={handleChange}
             required
+            disabled={isLoading} 
           />
         </div>
 
@@ -77,26 +75,29 @@ function RegisterPage() {
             value={formData.email}
             onChange={handleChange}
             required
+            disabled={isLoading} 
           />
         </div>
 
         <div className="form-group">
-          <label htmlFor="password">Password</label>
+          {/* Update label for clarity */}
+          <label htmlFor="password">Password (min 8 chars, max 72 bytes)</label> 
           <input
             type="password"
             id="password"
             name="password"
             value={formData.password}
             onChange={handleChange}
-            minLength="8"
+            minLength="8" // Basic HTML5 validation
             required
+            disabled={isLoading} // Disable input while loading
           />
         </div>
 
-        <button type="submit" className="auth-button">Register</button>
-        
-        {/* Display any registration errors */}
-        {error && <p className="error-message">{error}</p>}
+        {/* Update button text and disable on load */}
+        <button type="submit" className="auth-button" disabled={isLoading}>
+           {isLoading ? 'Registering...' : 'Register'}
+        </button>
         
         <p className="auth-switch">
           Already have an account? <Link to="/login">Login here</Link>

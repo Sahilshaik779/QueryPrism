@@ -352,3 +352,8 @@
   opacity: 0.5;
   color: #999; /* Grey out when deleting */
 }
+
+.message-list.loading {
+  opacity: 0.7; /* Dim the list slightly when loading */
+  transition: opacity 0.2s ease-in-out;
+}
