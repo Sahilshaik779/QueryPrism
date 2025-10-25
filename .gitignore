@@ -1,21 +1,75 @@
-# Python backend specific
-backend/venv/
-backend/__pycache__/
-backend/*.pyc
-backend/.env
-backend/data/vector_stores/*
-!backend/data/vector_stores/.gitkeep # Keep the folder but ignore contents
-backend/taskplanner.db # If you still have this temp db
 
-# Node frontend specific
+# OS / Editor Specific
+
+.DS_Store
+Thumbs.db
+*.sw?
+*.suo
+*.user
+*.ntvs*
+*.njsproj
+*.sln
+
+# VS Code 
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# JetBrains / PyCharm
+.idea/
+
+
+# Python / Backend Specific
+
+
+# Virtual environments
+backend/venv/
+pyvenv.cfg # Part of venv structure seen in image
+
+
+backend/**/__pycache__/
+backend/*.py[cod]
+backend/*$py.class
+
+backend/.env
+
+
+backend/data/chroma_db/*
+!backend/data/chroma_db/.gitkeep
+backend/data/chroma_db/*.sqlite3 # Ignore Chroma's internal SQLite DB
+
+# Vector Stores 
+backend/data/vector_stores/*
+!backend/data/vector_stores/.gitkeep
+
+
+
+
+# Node / Frontend Specific
+
+
+# Dependencies
 frontend/node_modules/
-frontend/.DS_Store
+
+# Logs
+frontend/logs/
+frontend/*.log
 frontend/npm-debug.log*
 frontend/yarn-debug.log*
 frontend/yarn-error.log*
-frontend/.env*.local
-frontend/.env
+frontend/pnpm-debug.log*
+frontend/lerna-debug.log*
 
-# OS specific
-.DS_Store
-Thumbs.db
+# Build output / Distribution files 
+frontend/dist/
+frontend/dist-ssr/
+
+
+# Environment variables
+frontend/.env*.local
+frontend/.env*.development*
+frontend/.env*.test*
+frontend/.env*.production*
+frontend/.env
